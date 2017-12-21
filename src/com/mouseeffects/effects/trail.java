@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class trail extends JComponent implements ActionListener {
 	
 	private Timer trailTimer = new Timer(1, this);
-	private Timer paintTimer = new Timer(30, this);
+	private Timer paintTimer = new Timer(25, this);
 	private Point p = MouseInfo.getPointerInfo().getLocation();
 	private Point current;
 	private Point previous;
@@ -62,10 +62,10 @@ public class trail extends JComponent implements ActionListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setColor(Color.BLACK);
+		g.setColor(Color.BLUE);
 		g2.drawString("Mouse x: " + p.x, 100, 100);
 		g2.drawString("Mouse y: " + p.y, 100, 150);
-		
+
 		if(mouseTrail.size() > 2) {
 			for(int i = 1; i < mouseTrail.size() - 1; i++) {
 				current = ((LinkedList<Point>) mouseTrail).get(i);
@@ -75,7 +75,15 @@ public class trail extends JComponent implements ActionListener {
 				g2.drawLine((int) current.getX(), (int) current.getY(), (int) previous.getX(), (int) previous.getY());
 			}
 		}
-		
+
+		g2.setColor(Color.RED);
+        g2.drawLine(p.x - 15, p.y, p.x + 15, p.y);
+        g2.drawLine(p.x, p.y - 15, p.x, p.y + 15);
+
+        g2.setColor(Color.YELLOW);
+        g2.drawLine(p.x - 7, p.y - 7, p.x + 7, p.y + 7);
+        g2.drawLine(p.x - 7, p.y + 7, p.x + 7, p.y - 7);
+
 	}
 	
 	public Dimension getPreferredSize() {
