@@ -9,23 +9,22 @@ import java.util.LinkedList;
 
 public class trail extends JComponent implements ActionListener {
 	
-	Timer trailTimer = new Timer(1, this);
-	Timer paintTimer = new Timer(1, this);
-	Point p = MouseInfo.getPointerInfo().getLocation();
-	Point current;
-	Point previous;
-	Color c;
+	private Timer trailTimer = new Timer(1, this);
+	private Timer paintTimer = new Timer(30, this);
+	private Point p = MouseInfo.getPointerInfo().getLocation();
+	private Point current;
+	private Point previous;
+	private Color c;
 	
 	
 	public trail() {
 		trailTimer.start();
 		paintTimer.start();
 	}
+
+    private final Deque<Point> mouseTrail = new LinkedList<>();
 	
-	private int size = 300;
-	private final Deque<Point> mouseTrail = new LinkedList<>();
-	
-	public Color getColor(int size, int index) {
+	private Color getColor(int size, int index) {
 		int divisionSize = 1450 / size;
 		int value = divisionSize * index;
 		int red = 0;
@@ -64,8 +63,6 @@ public class trail extends JComponent implements ActionListener {
 		g2.setStroke(new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.BLACK);
-		g.fillRect(0, getHeight() / 2 - 10, getWidth(), 20);
-		g.fillRect(getWidth() / 2 - 10, 0, 20, getHeight());
 		g2.drawString("Mouse x: " + p.x, 100, 100);
 		g2.drawString("Mouse y: " + p.y, 100, 150);
 		
@@ -89,13 +86,16 @@ public class trail extends JComponent implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == paintTimer) {
 			repaint();
+			System.out.println("paintTimer");
 		}
 		if(e.getSource() == trailTimer) {
 			p = MouseInfo.getPointerInfo().getLocation();
-			if(mouseTrail.size() >= size) {
+            int size = 300;
+            while(mouseTrail.size() >= size) {
 				mouseTrail.pop();
 			}
 			mouseTrail.offer(p);
+            System.out.println("trailTimer");
 		}
 	}
 }
